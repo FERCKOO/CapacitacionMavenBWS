@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:head>
+            <title>Reportes STP</title>
+            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+
+        </h:head>
+        <h:body>
+            <h:form id="form">
+
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+                <p:dialog fitViewport="true" widgetVar="statusDialog" modal="true" 
+                          draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage value="/imagenes/homero.gif" />
+                </p:dialog>
+
+                <p:messages id="messages" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+
+                <p:outputLabel for="fechaInicio" value="Fecha inicio:"/>
+                <p:datePicker id="fechaInicio" value="#{reportesBean.fechaInicio}"
+                              style="margin-left: 15px; margin-right: 15px" 
+                              required="true"/>
+
+                <p:outputLabel for="fechaFin" value="Fecha fin:"/>
+                <p:datePicker id="fechaFin" value="#{reportesBean.fechaFin}"
+                              style="margin-left: 15px; margin-right: 15px" 
+                              required="true"/>
+
+                <h:outputText value="Estatus:" />
+                <p:selectOneButton value="#{reportesBean.status}" 
+                                   style="margin-left: 15px; margin-right: 15px">
+                    <f:selectItem itemLabel="Ambos" itemValue="" />
+                    <f:selectItem itemLabel="Activo" itemValue="true" />
+                    <f:selectItem itemLabel="No activo" itemValue="false" />
+                </p:selectOneButton>
+
+                <p:commandButton icon="pi pi-search" value="Buscar"
+                                 action="#{reportesBean.obtenerReportesSTP()}"
+                                 update="dtReportes messages" style="color: black;"/>
+
+                <p:dataTable id="dtReportes" value="#{reportesBean.activaciones}" 
+                             editable="true" widgetVar="dtReportes" rows="10"
+                             var="activacion" paginator="true" paginatorPosition="bottom"
+                             style="margin-top: 15px" rowsPerPageTemplate="5,10,15,{ShowAll|'All'}">
+
+                    <p:column headerText="Ciudad" >
+                        <h:outputText value="#{activacion.ciudad}"/>
+                    </p:column>
+
+                    <p:column headerText="Fecha petición" >
+                        <h:outputText value="#{activacion.fechaPeticion}" >
+                            <f:convertDateTime pattern="MM/dd/yyyy hh:mm" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column  headerText="Estado">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('dtReportes').filter()" 
+                                               styleClass="custom-filter">
+                                <f:selectItem itemLabel="Ambos" itemValue="" />
+                                <f:selectItem itemLabel="Activo" itemValue="true" />
+                                <f:selectItem itemLabel="No activo" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{activacion.idCiudad.activo == true ? 'Activo' : 'No activo'}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu style="width:100%" required="true"
+                                                 value="#{activacion.idCiudad.activo}">
+                                    <f:selectItem itemLabel="Activo" itemValue="true" />
+                                    <f:selectItem itemLabel="No activo" itemValue="false" />
+                                </p:selectOneMenu>
+                            </f:facet>
+
+                        </p:cellEditor>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+        </h:body>
+    </ui:define>
+</ui:composition>
+

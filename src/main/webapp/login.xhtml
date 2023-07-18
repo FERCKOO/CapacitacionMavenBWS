@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <f:facet name="first">
+            <link rel="icon" href="#{request.contextPath}/Logo.ico"
+                  title="icono" type="image/x-icon" />
+        </f:facet>
+        <h:outputScript name="js/nanoscroller.js" library="mirage-layout" />
+        <h:outputScript name="js/layout.js" library="mirage-layout" />
+
+        <style type="text/css">
+            form {
+                height: 420px;
+                width: 350px;
+                position: absolute;
+                transform: translate(-50%,-50%);
+                top: 50%;
+                left: 50%;
+                padding: 20px 35px;
+                display: grid;
+                justify-items: center;
+
+                border: solid 2px black;
+                border-radius: 15px;
+
+                box-shadow: 0px 3px 2px 2px white;
+
+                color: #EBA91E;
+            }
+
+            #circle {
+                width: 130px;
+                height: 130px;
+                background: #EBA91E;
+                -moz-border-radius: 50px;
+                -webkit-border-radius: 50px;
+                border-radius: 50%;
+
+                display: flex;
+                justify-content: center;
+            }
+        </style>
+    </h:head>
+    <h:body style="margin: 0;">
+
+        <h:form id="loginForm">
+
+            <h2>Log in</h2>
+
+            <div id="circle">
+                <p:graphicImage value="/imagenes/Logo.png" title="imagenLogo" 
+                                alt="Logo" width="150px" />
+            </div>
+
+            <span class="ui-float-label" style="margin-top: 20px">
+                <p:inputText id="username" 
+                             value="#{usuarioBean.usuario.usuario}" maxlength="20"
+                             style="width: 100%;"/>
+                <p:outputLabel value="Username" style="color: #EBA91E;"/>
+            </span>
+
+            <span class="ui-float-label" style="margin-top: 25px">
+                <p:inputText id="password" maxlength="12" type="password"
+                             value="#{usuarioBean.usuario.password}" />
+                <p:outputLabel value="Password" style="color: #EBA91E;"/>
+            </span>
+
+            <p:commandButton action="#{usuarioBean.validarDatos()}" value="Login"
+                             update="loginForm" icon="pi pi-sign-in"
+                             style="background-color: #EBA91E;">
+            </p:commandButton>
+
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+            <p:dialog fitViewport="true" widgetVar="statusDialog" modal="true" 
+                      draggable="false" closable="false" resizable="false" 
+                      showHeader="false">
+                <p:graphicImage value="/imagenes/homero.gif" />
+            </p:dialog>
+
+        </h:form>
+        
+        <h:outputStylesheet name="css/nanoscroller.css" library="mirage-layout" />
+        <h:outputStylesheet name="css/primeflex.css" library="mirage-layout" />
+        <h:outputStylesheet name="css/layout-yellow-dark.css" library="mirage-layout" />
+    </h:body>
+</html>

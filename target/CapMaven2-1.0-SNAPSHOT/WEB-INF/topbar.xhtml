@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:pa="http://primefaces.org/mirage">
+
+    <style>
+        .avatar{
+            width: 50px;
+            height: 50px;
+            background: #EBA91E;
+            -moz-border-radius: 50px;
+            -webkit-border-radius: 50px;
+            border-radius: 50%;
+
+            color: black;
+            font-size: 35px;
+
+            display: flex;
+            justify-content: center;
+        }
+
+    </style>
+
+    <div class="layout-topbar">
+        <div class="layout-topbar-wrapper">
+            <div class="layout-topbar-left">
+                <div class="layout-topbar-logo-wrapper">
+                    <a href="dashboard.xhtml" class="layout-topbar-logo">
+                        <p:graphicImage name="images/logo-mirage@2x.png" library="mirage-layout" />
+                        <span class="app-name">Mirage</span>
+                    </a>
+                </div>
+
+                <a href="#" class="sidebar-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+
+                <a href="#" class="megamenu-mobile-button">
+                    <i class="fa fa-align-right megamenu-icon"></i>
+                </a>
+
+                <a href="#" class="topbar-menu-mobile-button">
+                    <i class="fa fa-ellipsis-v"></i>
+                </a>
+            </div>
+            <div class="layout-topbar-right">
+                <ul class="layout-topbar-actions">
+
+                    <li class="topbar-item profile-item">
+                        <a href="#">
+                            <span class="profile-image-wrapper avatar">
+                                #{sesion.getUserName().charAt(0)}
+                            </span>
+                            <span class="profile-info-wrapper">
+                                <h3>#{sesion.userName}</h3>
+                            </span>
+                        </a>
+
+                        <ul class="profile-item-submenu">
+                            <li class="profile-submenu-header">
+                                <span class="profile-image-wrapper avatar">
+                                    #{sesion.userName.charAt(0)}
+                                </span>
+                                <div class="profile">
+                                    <h2>#{sesion.userName}</h2>
+                                </div>
+                            </li>
+                            <li class="layout-submenu-footer">
+                                <h:form>
+                                    <p:commandButton oncomplete="window.location = '#{facesContext.externalContext.requestContextPath}/login.xhtml';" 
+                                                     action="#{usuarioBean.logout()}"  
+                                                     value="Cerrar sesión"
+                                                     icon="pi pi-sign-out" process="@this"/>
+                                </h:form>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</ui:composition>

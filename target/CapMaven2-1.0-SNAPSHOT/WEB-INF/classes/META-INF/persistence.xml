@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="CapMaven2" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.mycompany.capmaven.entity.SUsuarios</class>
+    <class>com.mycompany.capmaven.entity.CCiudad</class>
+    <class>com.mycompany.capmaven.entity.SPerfiles</class>
+    <class>com.mycompany.capmaven.entity.CClientes</class>
+    <class>com.mycompany.capmaven.entity.SAccesos</class>
+    <class>com.mycompany.capmaven.entity.SPerfilesAccesos</class>
+    <class>com.mycompany.capmaven.entity.HActivacion</class>
+    <class>com.mycompany.capmaven.entity.CRegion</class>
+    <class>com.mycompany.capmaven.entity.MArchivoLote</class>
+    <class>com.mycompany.capmaven.entity.CTipoTelefono</class>
+    <class>com.mycompany.capmaven.entity.CDistribuidor</class>
+    <class>com.mycompany.capmaven.entity.CAutomata</class>
+    <class>com.mycompany.capmaven.entity.CTelefonia</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <shared-cache-mode>NONE</shared-cache-mode>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://192.168.98.224:1433;databaseName=ACTIVACION"/>
+      <property name="javax.persistence.jdbc.user" value="activa"/>
+      <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+      <property name="javax.persistence.jdbc.password" value="activa"/>
+    </properties>
+  </persistence-unit>
+</persistence>

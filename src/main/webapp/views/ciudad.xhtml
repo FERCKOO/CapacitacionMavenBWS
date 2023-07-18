@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:head>
+            <title>Ciudad</title>
+            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />  
+
+        </h:head>
+        <h:body>
+
+            <h:form id="form">
+
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+                <p:dialog fitViewport="true" widgetVar="statusDialog" modal="true" 
+                          draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage value="/imagenes/homero.gif" />
+                </p:dialog>
+
+                <p:messages id="messages" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+
+                <p:commandButton icon="pi pi-plus" value="Añadir" type="button" 
+                                 onclick="PF('addDialogCd').show()"
+                                 style="margin-bottom:14px; margin-right:20px;
+                                 background-color: #3EBB18; border-color: green; color: black;"/>
+
+                <p:dialog id="addDialogCd" header="Añadir una nueva ciudad" 
+                          widgetVar="addDialogCd" >
+                    
+                    <p:ajax event="close" listener="#{ciudadBean.limpiarDatos()}" update="AddPanel"/>
+                    <h:outputText value="Inserta los datos a añadir en el registro." />
+
+                    <h:panelGrid id="AddPanel" columns="3" cellpadding="5">
+
+                        <p:outputLabel for="descripcion" value="Descripción:" />
+                        <p:inputText id="descripcion" value="#{ciudadBean.ciudad.descripcion}"
+                                     placeholder="Descripción" title="Campo de tipo texto"
+                                     required="true" immediate="true" maxlength="15" />
+                        <p:tooltip id="toolTipDescripcion" for="descripcion" 
+                                   showEvent="focus" hideEvent="blur" />
+
+                        <p:outputLabel for="codigo" value="Código:" />
+                        <p:inputText id="codigo" value="#{ciudadBean.ciudad.codigo}" 
+                                     placeholder="Código" title="Campo de tipo texto"
+                                     maxlength="4" required="true"/>
+                        <p:tooltip id="toolTipCodigo" for="codigo" 
+                                   showEvent="focus" hideEvent="blur"/>
+
+                        <p:outputLabel for="lada" value="Lada:" />
+                        <p:inputText id="lada" value="#{ciudadBean.ciudad.lada}" maxlength="3"
+                                     title="Campo de tipo entero" placeholder="Lada"
+                                     required="true"/>
+                        <p:tooltip id="toolTipLada" for="lada" showEvent="focus" 
+                                   hideEvent="blur" />
+
+                    </h:panelGrid>
+                    <p:commandButton value="Confirmar" icon="pi pi-check"
+                                     action="#{ciudadBean.agregarCiudad()}" 
+                                     style="margin-top: 15px; margin-left:30px; color: black;"
+                                     process="@parent" update="dtCiudades AddPanel"/>
+
+                </p:dialog>
+
+                <p:dataTable id="dtCiudades" value="#{ciudadBean.ciudades}" 
+                             editable="true" widgetVar="dtCiudades" rowsPerPageTemplate="5,10,15,{ShowAll|'All'}"
+                             var="ciudad" paginator="true" rows="10" paginatorPosition="bottom">
+
+                    <p:ajax event="rowEdit" listener="#{ciudadBean.editarCiudad(ciudad)}" />
+
+
+                    <p:column headerText="Descripción" filterBy="#{ciudad.descripcion}" 
+                              filterMatchMode="contains" id="filtroDescripcion">
+
+                        <p:cellEditor>
+
+                            <f:facet name="output">
+                                <h:outputText value="#{ciudad.descripcion}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{ciudad.descripcion}" 
+                                             label="id" required="true"
+                                             maxlength="15"/>
+                            </f:facet>
+
+                        </p:cellEditor>
+
+                    </p:column>
+                    
+                    <p:column headerText="Código" filterBy="#{ciudad.codigo}" 
+                              filterMatchMode="contains" id="filtroCodigo">
+
+                        <p:cellEditor>
+
+                            <f:facet name="output">
+                                <h:outputText value="#{ciudad.codigo}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{ciudad.codigo}" 
+                                             label="id" required="true"
+                                             maxlength="15"/>
+                            </f:facet>
+
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column headerText="Lada" filterBy="#{ciudad.lada}" 
+                              filterMatchMode="contains" >
+
+                        <p:cellEditor>
+
+                            <f:facet name="output">
+                                <h:outputText value="#{ciudad.lada}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{ciudad.lada}" label="id"
+                                             maxlength="3"/>
+                            </f:facet>
+
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column filterBy="#{ciudad.activo}" headerText="Estado"
+                              filterMatchMode="equals">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('dtCiudades').filter()" 
+                                               styleClass="custom-filter">
+                                <f:selectItem itemLabel="Ambos" itemValue="" />
+                                <f:selectItem itemLabel="Activo" itemValue="true" />
+                                <f:selectItem itemLabel="No activo" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{ciudad.activo == true ? 'Activo' : 'No activo'}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu style="width:100%" required="true"
+                                                 value="#{ciudad.activo}">
+                                    <f:selectItem itemLabel="Activo" itemValue="true" />
+                                    <f:selectItem itemLabel="No activo" itemValue="false" />
+                                </p:selectOneMenu>
+                            </f:facet>
+
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column style="width:32px;text-align: center">
+
+                        <p:rowEditor style=" border-radius: 2px" 
+                                     editTitle="Editar" saveTitle="Guardar"
+                                     cancelTitle="Cancelar" />
+                    </p:column>
+
+                    <p:column style="width:32px;text-align: center">
+
+                        <p:commandButton id="EliminarCiudadBtn" process="@this"
+                                         icon="pi pi-ban" title="Eliminar" update="dtCiudades"
+                                         action="#{ciudadBean.eliminarCiudad(ciudad.idCiudad)}"
+                                         style="height: 34px; background-color: #B81600; border-color: #A81600">
+
+                            <p:confirm header="Confirmación" 
+                                       message="Estás seguro que quieres eliminar la ciudad: #{ciudad.descripcion}
+                                       con id: #{ciudad.idCiudad}" 
+                                       icon="pi pi-exclamation-triangle" />
+
+                        </p:commandButton>
+
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" > 
+                    <p:commandButton value="Eliminar" update="dtCiudades messages" type="button" 
+                                     styleClass="ui-confirmdialog-yes" icon="pi pi-check"
+                                     style="color: black;"/>
+                    <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" 
+                                     icon="pi pi-times" style="color: black;"/>
+                </p:confirmDialog> 
+            </h:form>
+
+        </h:body>
+    </ui:define>
+</ui:composition>
+

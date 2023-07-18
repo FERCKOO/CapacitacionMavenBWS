@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/CapMaven2">
+<Resource name="jdbc/PoolActiva"
+              auth="Container"
+              type="javax.sql.DataSource"
+              username="activa"
+              password="activa"
+              driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+              url="jdbc:sqlserver://192.168.98.224;DatabaseName=ACTIVACION;ProgramName=Capacitacion;characterEncoding=iso-8859-1"
+              maxActive="10"
+              maxIdle="4"/>
+</Context>
