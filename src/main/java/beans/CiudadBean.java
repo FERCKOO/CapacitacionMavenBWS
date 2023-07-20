@@ -51,13 +51,14 @@ public class CiudadBean implements Serializable {
         respuesta = model.create(ciudad);
 
         limpiarDatos();
+        PrimeFaces current = PrimeFaces.current();
 
         ciudades = model.findCCiudadEntities();
 
         addMessage(respuesta.getTipoRespuesta(), respuesta.getHead(), respuesta.getMsg() + respuesta.getIdRespuesta());
 
-        PrimeFaces current = PrimeFaces.current();
         current.executeScript("PF('addDialogCd').hide();");
+
     }
 
     public void eliminarCiudad(long ciudadId) throws NonexistentEntityException {

@@ -1,0 +1,61 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pm="http://primefaces.org/mirage">
+
+    <style>
+        #circle {
+            width: 70px;
+            height: 70px;
+            background: #EBA91E;
+            -moz-border-radius: 50px;
+            -webkit-border-radius: 50px;
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+
+    <div class="layout-sidebar">
+        <div class="sidebar-logo">
+            <div id="circle" >
+                <p:graphicImage value="/imagenes/Logo.png" title="imagenLogo" 
+                                alt="Logo" width="100px" height="200px" />
+            </div>
+            <span class="app-name">Menú</span>
+
+        </div>
+
+        <div class="layout-menu-container">
+            <div class="nano">
+                <div class="nano-content menu-scroll-content">
+                    <h:form id="menuform">
+                        <pm:menu>
+
+                            <p:menuitem id="om_inicio" value="Inicio" 
+                                        icon="pi pi-home" outcome="/views/galeria" />
+                            <p:menuitem id="om_ciudad" value="Ciudades" 
+                                        icon="pi pi-building" outcome="/views/ciudad" />
+                            <p:menuitem id="om_parametro" value="Parámetros" 
+                                        icon="pi pi-book" outcome="/views/parametro" />
+                            <p:menuitem id="om_perfil" value="Perfiles" 
+                                        icon="pi pi-user" outcome="/views/perfiles" />
+                            <p:submenu label="Reportes">
+                                <p:menuitem id="om_reporte" value="Reportes" 
+                                        icon="pi pi-file" outcome="/views/reportes" />
+                                <p:menuitem id="om_reportestp" value="Reportes STP" 
+                                        icon="pi pi-file" outcome="/views/reportesSTP" />
+                            </p:submenu>
+
+                        </pm:menu>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ui:composition>

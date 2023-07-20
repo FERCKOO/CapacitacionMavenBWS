@@ -24,16 +24,20 @@ public class ReportesBean implements Serializable {
 
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private Boolean status = true;
     
-    private LocalDate fechaActual ;
-
+    private Boolean status = true;
+    private Boolean activo = false;
+    
+    private LocalDate fechaActual;
+    
     Respuesta respuesta;
 
     @PostConstruct
     public void init() {
         activaciones = new ArrayList<>();
         respuesta = new Respuesta();
+        
+        fechaActual = LocalDate.now();
     }
 
     public void obtenerReportes() throws ParseException {
@@ -72,6 +76,16 @@ public class ReportesBean implements Serializable {
         }
         addMessage(respuesta.getTipoRespuesta(), respuesta.getHead(), respuesta.getMsg());
 
+    }
+    
+    public void mostrarFecha(){
+        System.out.println(fechaInicio);
+        System.out.println(fechaInicio == null);
+        System.out.println(fechaFin);
+        
+        setActivo(true);
+        
+        System.out.println(activo);
     }
 
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
@@ -149,7 +163,6 @@ public class ReportesBean implements Serializable {
     public void setStatus(Boolean status) {
         this.status = status;
     }
-//</editor-fold>
 
     /**
      * @return the fechaActual
@@ -161,8 +174,25 @@ public class ReportesBean implements Serializable {
     /**
      * @param fechaActual the fechaActual to set
      */
-    public void setFechaActual() {
-        this.fechaActual = LocalDate.now();
+    public void setFechaActual(LocalDate fechaActual) {
+        this.fechaActual = fechaActual;
+    }
+
+    
+//</editor-fold>
+
+    /**
+     * @return the activo
+     */
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    /**
+     * @param activo the activo to set
+     */
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
 }

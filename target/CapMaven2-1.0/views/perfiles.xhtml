@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:head>
+            <title>Perfiles</title>
+            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+
+        </h:head>
+        <h:body>
+
+            <h:form id="form">
+
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+                <p:dialog fitViewport="true" widgetVar="statusDialog" modal="true" 
+                          draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage value="/imagenes/homero.gif" />
+                </p:dialog>
+
+                <p:messages id="messages" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+
+                <p:commandButton icon="pi pi-plus" value="Añadir" type="button" 
+                                 onclick="PF('addDialogPerfil').show()"
+                                 style="margin-bottom:14px; margin-right:20px;
+                                 background-color: #3EBB18; border-color: green;
+                                 color: black;"/>
+
+                <p:dialog header="Añadir un nuevo perfil" 
+                          widgetVar="addDialogPerfil" >
+
+                    <p:ajax event="close" listener="#{perfilBean.limpiarDatos()}" update="AddPanel"/>
+                    <h:outputText value="Inserta los datos a añadir en el registro." />
+
+                    <h:panelGrid id="AddPanel"  columns="3" cellpadding="5">
+
+                        <p:outputLabel for="nombrePerfil" value="Nombre:" />
+                        <p:inputText id="nombrePerfil" value="#{perfilBean.perfil.nombrePerfil}" 
+                                     placeholder="Nombre" title="Campo de tipo texto"
+                                     maxlength="15" required="true"/>
+                        <p:tooltip id="toolTipNombrePerfil" for="nombrePerfil" 
+                                   showEvent="focus" hideEvent="blur"/>
+
+                        <p:outputLabel for="descripcion" value="Descripción:" />
+                        <p:inputText id="descripcion" value="#{perfilBean.perfil.descripcion}"
+                                     placeholder="Descripción" title="Campo de tipo texto"
+                                     required="true" immediate="true" maxlength="20" />
+                        <p:tooltip id="toolTipDescripcion" for="descripcion" 
+                                   showEvent="focus" hideEvent="blur" />
+
+                    </h:panelGrid>
+                    <p:commandButton value="Confirmar" icon="pi pi-check"
+                                     action="#{perfilBean.agregarPerfil()}" 
+                                     style="margin-top: 15px; margin-left:30px; color: black;"
+                                     process="@parent" update="dtPerfiles AddPanel messages"/>
+
+                </p:dialog>
+
+                <p:dataTable id="dtPerfiles" value="#{perfilBean.perfiles}" 
+                             editable="true" widgetVar="dtPerfiles" rows="10"
+                             var="perfil" paginator="true" paginatorPosition="bottom"
+                             rowsPerPageTemplate="5,10,15,{ShowAll|'All'}">
+
+                    <p:ajax event="rowEdit" listener="#{perfilBean.editarPerfil(perfil)}" />
+
+                    <p:column headerText="Nombre de perfil" filterBy="#{perfil.nombrePerfil}" 
+                              filterMatchMode="contains" >
+
+                        <p:cellEditor>
+
+                            <f:facet name="output">
+                                <h:outputText value="#{perfil.nombrePerfil}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{perfil.nombrePerfil}" label="id"
+                                             maxlength="20"/>
+                            </f:facet>
+
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column headerText="Descripción" filterBy="#{perfil.descripcion}" 
+                              filterMatchMode="contains" id="filtroDescripcion">
+
+                        <p:cellEditor>
+
+                            <f:facet name="output">
+                                <h:outputText value="#{perfil.descripcion}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{perfil.descripcion}" 
+                                             label="id" required="true"
+                                             maxlength="50"/>
+                            </f:facet>
+
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column filterBy="#{perfil.activo}" headerText="Estado"
+                              filterMatchMode="equals">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('dtPerfiles').filter()" 
+                                               styleClass="custom-filter">
+                                <f:selectItem itemLabel="Ambos" itemValue="" />
+                                <f:selectItem itemLabel="Activo" itemValue="true" />
+                                <f:selectItem itemLabel="No activo" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <p:cellEditor>
+
+                            <f:facet name="output">
+                                <h:outputText value="#{perfil.activo == true ? 'Activo' : 'No activo'}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu style="width:100%" required="true"
+                                                 value="#{perfil.activo}">
+                                    <f:selectItem itemLabel="Activo" itemValue="true" />
+                                    <f:selectItem itemLabel="No activo" itemValue="false" />
+                                </p:selectOneMenu>
+                            </f:facet>
+
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column style="width:70px; text-align: center" headerText="Accesos">
+
+                        <p:commandButton id="AccesosPerfil" title="Accesos" process="@this"
+                                         icon="pi pi-id-card" update="form:pickListAccesos form:accesosDialog"
+                                         style="height: 34px; background-color: transparent;"
+                                         oncomplete="PF('accesosDialog').show()"
+                                         action="#{accesosBean.obtenerAccesos()}">
+
+                            <f:setPropertyActionListener id="propiedadPerfil" target="#{accesosBean.perfil}" value="#{perfil}" />
+
+                        </p:commandButton>
+                    </p:column>
+
+                    <p:column style="width:70px;text-align: center" headerText="Editar">
+
+                        <p:rowEditor style=" border-radius: 2px" 
+                                     editTitle="Editar" saveTitle="Guardar"
+                                     cancelTitle="Cancelar" />
+                    </p:column>
+
+                    <p:column style="width:70px;text-align: center" headerText="Eliminar">
+
+                        <p:commandButton id="EliminarPerfilBtn" process="@this"
+                                         icon="pi pi-ban" title="Eliminar" update="dtPerfiles"
+                                         action="#{perfilBean.eliminarPerfil(perfil.idPerfil)}"
+                                         style="height: 34px; background-color: transparent;">
+
+                            <p:confirm header="Confirmación" icon="pi pi-exclamation-triangle"
+                                       message="Estás seguro que quieres eliminar el perfil #{perfil.descripcion}
+                                       con id: #{perfil.idPerfil}"/>
+
+                        </p:commandButton>
+
+                    </p:column>
+
+                    
+                </p:dataTable>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"> 
+                    <p:commandButton value="Eliminar" update="dtParametros messages" type="button" 
+                                     styleClass="ui-confirmdialog-yes" icon="pi pi-check" 
+                                     style="color:black;"/>
+                    <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" 
+                                     icon="pi pi-times" style="color:black;"/>
+                </p:confirmDialog>
+
+
+                <p:dialog showEffect="fade" hideEffect="fade" widgetVar="accesosDialog"
+                          id="accesosDialog" header="Accesos a perfiles." >
+
+                    <h:outputText value="Asigna los accesos necesarios para el perfil #{accesosBean.perfil.nombrePerfil} con id de perfil #{accesosBean.perfil.idPerfil}. " />
+
+                        <p:pickList id="pickListAccesos" value="#{accesosBean.accesos}" 
+                                    var="accesos" itemLabel="#{accesos}" itemValue="#{accesos}">
+                            <f:facet name="targetCaption" >Disponibles</f:facet>
+                            <f:facet name="sourceCaption" >Actuales </f:facet>
+                        </p:pickList>
+
+                    <p:commandButton value="Confirmar" style="margin-top: 15px;
+                                     margin-left:30px; color: black;" update="pickListAccesos messages"
+                                     process="@this pickListAccesos"
+                                     styleClass="ui-confirmdialog-yes" icon="pi pi-check"
+                                     action="#{accesosBean.actualizarAccesos()}"/>
+                </p:dialog>
+
+            </h:form>
+
+        </h:body>
+    </ui:define>
+</ui:composition>
+
